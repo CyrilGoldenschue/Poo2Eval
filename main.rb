@@ -1,5 +1,5 @@
 require "./src/smtp_connector"
-require 'kramdown'
+require "./src/recipientsVisitor"
 
 config = {
   'recipients_filename' => 'recipients.txt',
@@ -8,20 +8,9 @@ config = {
 
 from = "pascal.hurni@cpnv.ch"
 
-recipients = []
-
-if config['recipients_filename']
-  recipients.concat(File.readlines(config['recipients_filename'], chomp: true))
-end
-
-if config['recipients_dbconnection']
-  require "sqlite3"
-  db = SQLite3::Database.new "users.db"
-  db.execute("SELECT email FROM users") do |row|
-    recipients << row['email']
-  end
-end
-
+#visitor
+visitor = RecipientsVisitor.new(config)
+recipients = visitor.visit
 
 add_sysinfo = ARGV.delete('--add-sysinfo')
 markdownize = ARGV.delete('--markdownize')

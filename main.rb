@@ -1,6 +1,12 @@
 require "./src/smtp_connector"
 require "./src/recipientsVisitor"
 
+require "./src/message"
+require "./src/sysinfoMessage"
+require "./src/markdownMessage"
+
+
+
 config = {
   'recipients_filename' => 'recipients.txt',
   'recipients_dbconnection' => nil
@@ -8,25 +14,22 @@ config = {
 
 from = "pascal.hurni@cpnv.ch"
 
-#visitor
 visitor = RecipientsVisitor.new(config)
 recipients = visitor.visit
 
 add_sysinfo = ARGV.delete('--add-sysinfo')
 markdownize = ARGV.delete('--markdownize')
 
-message = ARGV.shift
-#decorator
+message = Message.new(ARGV.shift).message
+
 if add_sysinfo
-  message += "\n\n---\n\n"
-  message += " - RUBY_VERSION: #{RUBY_VERSION}\n"
+  message = SysinfoMessage.new(message).message
 end
 
 if markdownize
-  message = Kramdown::Document.new(message).to_html
+  message = MarkdownMessage.new(message).message
 end
 
-#decorator
 mail_message = <<END_OF_MESSAGE
 From: #{from}
 To: #{recipients.join(", ")}

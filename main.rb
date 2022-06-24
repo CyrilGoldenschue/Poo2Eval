@@ -1,11 +1,9 @@
 require "./src/smtp_connector"
 require "./src/recipientsVisitor"
 
-require "./src/message"
+require "./src/messageFactory"
 require "./src/sysinfoMessage"
 require "./src/markdownMessage"
-
-
 
 config = {
   'recipients_filename' => 'recipients.txt',
@@ -14,21 +12,12 @@ config = {
 
 from = "pascal.hurni@cpnv.ch"
 
-visitor = RecipientsVisitor.new(config)
-recipients = visitor.visit
+recipientVisitor = RecipientsVisitor.new(config)
+recipients = recipientVisitor.visit
 
-add_sysinfo = ARGV.delete('--add-sysinfo')
-markdownize = ARGV.delete('--markdownize')
 
-message = Message.new(ARGV.shift).message
 
-if add_sysinfo
-  message = SysinfoMessage.new(message).message
-end
-
-if markdownize
-  message = MarkdownMessage.new(message).message
-end
+message = MessageFactory.new(ARGV.shift).message
 
 mail_message = <<END_OF_MESSAGE
 From: #{from}

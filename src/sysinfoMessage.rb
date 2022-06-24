@@ -1,5 +1,5 @@
 #decorator
-class SysinfoMessage < Message
+class SysinfoMessage < MessageFactory
     def initialize(message)
         @message = message
     end

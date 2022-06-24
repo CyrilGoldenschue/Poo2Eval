@@ -12,10 +12,7 @@ config = {
 
 from = "pascal.hurni@cpnv.ch"
 
-recipientVisitor = RecipientsVisitor.new(config)
-recipients = recipientVisitor.visit
-
-message = MessageHandler.new(ARGV.shift).message
+recipients = RecipientsVisitor.new(config).visit
 
 mail_message = <<END_OF_MESSAGE
 From: #{from}
@@ -24,7 +21,7 @@ MIME-Version: 1.0
 Content-type: text/html
 Subject: Notification
 
-#{message}
+#{MessageHandler.new(ARGV.shift).message}
 END_OF_MESSAGE
 
 SmtpConnector.new(mail_message: mail_message, from: from, recipients: recipients).run

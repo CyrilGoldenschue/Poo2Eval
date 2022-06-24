@@ -1,7 +1,7 @@
 require "./src/smtp_connector"
 require "./src/recipientsVisitor"
 
-require "./src/message"
+require "./src/messageHandler"
 require "./src/sysinfoMessage"
 require "./src/markdownMessage"
 
@@ -15,7 +15,7 @@ from = "pascal.hurni@cpnv.ch"
 recipientVisitor = RecipientsVisitor.new(config)
 recipients = recipientVisitor.visit
 
-message = Message.new(ARGV.shift).message
+message = MessageHandler.new(ARGV.shift).message
 
 mail_message = <<END_OF_MESSAGE
 From: #{from}

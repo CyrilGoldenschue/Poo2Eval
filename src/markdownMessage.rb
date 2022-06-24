@@ -1,6 +1,6 @@
 #decorator
 require 'kramdown'
-class MarkdownMessage < Message
+class MarkdownMessage < MessageHandler
     def initialize(message)
         @message = message
     end

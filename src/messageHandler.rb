@@ -1,6 +1,6 @@
-#decorator
+#chain of responsability
 
-class Message
+class MessageHandler
     def initialize(message)
         @message = message
     end

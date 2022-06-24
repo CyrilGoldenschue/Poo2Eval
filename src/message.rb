@@ -1,6 +1,6 @@
-#factory
+#decorator
 
-class MessageFactory 
+class Message
     def initialize(message)
         @message = message
     end

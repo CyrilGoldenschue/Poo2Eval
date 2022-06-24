@@ -1,4 +1,4 @@
-require 'net/smtp'
+require "./src/smtp_connector"
 require 'kramdown'
 
 config = {
@@ -27,7 +27,7 @@ add_sysinfo = ARGV.delete('--add-sysinfo')
 markdownize = ARGV.delete('--markdownize')
 
 message = ARGV.shift
-
+#decorator
 if add_sysinfo
   message += "\n\n---\n\n"
   message += " - RUBY_VERSION: #{RUBY_VERSION}\n"
@@ -37,6 +37,7 @@ if markdownize
   message = Kramdown::Document.new(message).to_html
 end
 
+#decorator
 mail_message = <<END_OF_MESSAGE
 From: #{from}
 To: #{recipients.join(", ")}
@@ -47,9 +48,4 @@ Subject: Notification
 #{message}
 END_OF_MESSAGE
 
-Net::SMTP.start('mail.cpnv.ch', 25) do |smtp|
-  smtp.send_message mail_message,
-  from,
-  recipients
-end
-
+SmtpConnector.new(mail_message: mail_message, from: from, recipients: recipients).run
